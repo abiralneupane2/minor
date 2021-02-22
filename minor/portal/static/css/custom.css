@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Baloo+2&display=swap');
+
+*{
+  margin: 0px;
+  font-family: 'Baloo 2';
+}
+body{
+  background-color: #ababab;
+  overflow-x: hidden;	
+}
+nav{
+  height: inherit;
+  width: 100%;
+  display: flex;
+  margin: 0px;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+  background-color: rgba(45, 45, 45, 0.9);
+  box-shadow: 0px 10px 30px rgba(45,45,45,0.6);
+  
+}
+.mlogo{
+  letter-spacing: 3px;
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  margin-left: 10%;
+
+}
+.nav-links{
+  margin-right: 5%;
+  display: flex;
+  justify-content: space-between;
+  /* width: 20%; */
+}
+.nav-links a{
+    position: relative;
+    color: rgb(200,200,200);
+    text-decoration: none;
+    letter-spacing: 3px;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 20px;
+    border-radius: 5%;
+
+}
+.nav-links li{
+  list-style: none;
+}
+.burger{
+  display: none;
+}
+.burger div{
+  background-color: rgb(210,210,210);
+  width: 20px;
+  height: 2px;
+  margin: 5px;
+}
+
+@media screen and (max-width:1000px){
+  .nav-links{
+    position:absolute;
+    right:0px;
+    margin-right: 0%;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+    top:48px;
+    background-color: inherit;
+    align-items:  center;
+    padding: 20px;
+    opacity: 0%;
+  }
+  .burger{
+    display: block;
+    margin-right: 10%;
+  }
+}
+
+
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:#0C9;
+	color:#FFF;
+	border-radius:50px;
+	text-align:center;
+	box-shadow: 2px 2px 3px #999;
+}
+
+
+
+.my-float{
+	margin-top:22px;
+}

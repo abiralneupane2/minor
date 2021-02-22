@@ -1,0 +1,108 @@
+{%extends 'nbase.html'%}
+{%load static%}
+{%load tags%}
+{%block content%}
+
+<h1>Dashboard</h1>
+
+{% for article in articles %}
+<div class="card" style="margin: 10px;">
+  <div class="card-header">
+    <a href="{% url 'article' article.id %}">{{article}}</a><br>
+    {{article.uploaded_by}}-{{article.last_edited}}<br>
+    <span>{{article.get_favouritee|length}}</span>
+    <div id="favourite-container" style="float: right;">
+
+
+      <button
+        class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
+        value="{{article.id}}">Favourite</button>
+
+
+    </div>
+  </div>
+  <div class="card-body">
+    Preview:<br>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
+    voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
+    <br><br><button class="btn btn-primary" style="float: right;">Download</button>
+  </div>
+
+  <div class="card-footer comment">
+    <div>
+      <input type="text" placeholder="Comment" />
+      <button class="btn comment" value="{{article.id}}">Post</button>
+    </div>
+    <div style="max-height: 150px; overflow: scroll;">
+      {% for comment in article.get_comments %}
+      <br><a href="{%url 'profileview' comment.from_person %}"> <strong> {{comment.from_person}} </strong></a> :
+      {{comment}}
+      {% endfor %}
+    </div>
+
+  </div>
+
+</div>
+{% endfor %}
+
+
+<button type="button" class="btn float" id="add" data-toggle="modal" data-target="#exampleModalScrollable"
+  id="#modalScroll"><i class="fa fa-plus my-float"></i>
+</button>
+
+
+
+
+<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalScrollableTitle" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalScrollableTitle">Add Article</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span>
+        </button>
+      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="modal-body">
+
+          <div class="form-group">
+            <label for="articlename">Name</label>
+            {{form.name}}
+          </div>
+
+          <div class="form-group">
+            <div class="custom-file">
+              {{form.document}}
+              <!-- <label class="custom-file-label" for="customFile">Choose file</label> -->
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="doc_type">Type</label>
+            {{form.doc_type}}
+          </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+</div>
+
+</div>
+</div>
+
+
+{%endblock%}
