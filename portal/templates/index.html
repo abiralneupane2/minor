@@ -12,39 +12,36 @@
 
 {% for article in articles %}
 <div class="card" style="margin: 10px;">
-  <div class="card-header">
+  <div>
     <a href="{% url 'article' article.id %}">{{article}}</a><br>
     {{article.uploaded_by}}-{{article.last_edited}}<br>
     <span>{{article.get_favouritee|length}}</span>
-    <div id="favourite-container" style="float: right;">
-
-      <!-- favourite button -->
       <button
         class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
         value="{{article.id}}">Favourite</button>
-    </div>
   </div>
 
   <!-- card body -->
-  <div class="card-body">
+  <div>
     Preview:<br>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
     voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
-    <br><br><button class="btn btn-primary" style="float: right;">Download</button>
+    <br><br><button>Download</button>
   </div>
+
   <!--comment div-->
-  <div class="card-footer comment">
+  <div class="comment">
     <div>
       <input type="text" placeholder="Comment" />
-      <button class="btn comment" value="{{article.id}}">Post</button>
+      <button class="comment" value="{{article.id}}">Post</button>
     </div>
-    <div style="max-height: 150px; overflow: scroll;">
+    <!--comments list -->
+    <div>
       {% for comment in article.get_comments %}
-      <br><a href="{%url 'profileview' comment.from_person %}"> <strong> {{comment.from_person}} </strong></a> :
+      <br><a href="{%url 'profileview' comment.from_person.user.username %}"> <strong> {{comment.from_person}} </strong></a> :
       {{comment}}
       {% endfor %}
     </div>
-
   </div>
 
 </div>
