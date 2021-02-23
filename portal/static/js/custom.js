@@ -10,11 +10,9 @@ $('.burger').click(function(){
 
 
 //function to favourite article
-$('button.favourite').click(function (event) {
+$('input.favourite').click(function (event) {
   id = $(event.target).attr('value')
   favNum = $(event.target).parent().parent().find('span')
-
-  console.log(favNum.text());
   $.ajax({
     url: favouriteurl,
     cache: false,
@@ -23,12 +21,12 @@ $('button.favourite').click(function (event) {
     },
     success: function (res) {
       if (res.status == "created") {
-        $(event.target).attr("class", "btn btn-primary");
+        $(event.target).attr("checked", "True");
         favNum.text(parseInt(favNum.text()) + 1);
       }
       else if (res.status == "deleted") {
 
-        $(event.target).attr("class", "btn btn-outline-primary")
+        $(event.target).attr("checked", "False")
         favNum.text(favNum.text() - 1);
       }
 

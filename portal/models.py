@@ -25,7 +25,7 @@ class Person(models.Model):
     user_type = models.CharField(max_length=3, choices=FACULTY, default='NS')
     academic_status = models.IntegerField(choices=ACADEMIC_STATUS, default=1)
     description = models.TextField(max_length=500, null=True)
-
+    status = models.BooleanField(default=False)
 
     def get_followers_number(self):
         return len(Relationship.objects.filter(to_person=self))
@@ -69,9 +69,10 @@ class Article(models.Model):
     objects = models.Manager()
     name = models.CharField(max_length=500)
     last_edited = models.DateField(auto_now= True)
-    uploaded_by = models.ForeignKey(Person, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(Person, on_delete=models.CASCADE,related_name="owner")
     document = models.FileField(upload_to='files/', null=True)
     doc_type = models.IntegerField(choices=DOC_TYPE, default=1)
+    collaborators = models.ManyToManyField(Person, related_name="collaborators")
     def get_favouritee(self):
         favourites = Favourite.objects.filter(to_article=self)
         return favourites

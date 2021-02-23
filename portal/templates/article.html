@@ -20,7 +20,41 @@
         Preview:<br>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
         voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
-        <br><br><button class="btn btn-primary" style="float: right;">Download</button>
+        <br><br>
+        <button class="btn btn-primary" style="float: right;">Download</button>
+        {% if article.uploaded_by == request.user.person %}
+            <button class="btn btn-primary" style="float: right;">Delete</button>
+            <button class="btn btn-primary" id="myBtn" style="float: right;">Edit</button>
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <!-- form starts here -->
+                  <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                      <div class="form-group">
+                        <label>Name</label>
+                        {{form.name}}
+                      </div>
+                      <div class="form-group">
+                        <label>Collaborators</label>
+                        {{form.collaborators}}
+                      </div>
+                      <div class="form-group">
+                        <div class="custom-file">
+                          {{form.document}}
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label for="doc_type">Type</label>
+                        {{form.doc_type}}
+                      </div>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              
+              </div>
+        {% endif %}
     </div>
 
     <!-- comment div -->

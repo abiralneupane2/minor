@@ -5,11 +5,8 @@ register = template.Library()
 
 @register.filter
 def checkFavourite(article, user):
-    print('check')
+
     status = article.check_favourite(user.person)
+    print(status)
     return status
 
-def cut(value, arg):
-    """Removes all values of arg from the given string"""
-    print('works')
-    return value.replace(arg, '')

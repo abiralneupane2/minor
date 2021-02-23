@@ -2,21 +2,11 @@ from django import forms
 from . import models
 from django.contrib.auth.models import User
 
-class ArticleFileForm(forms.ModelForm):
-    class Meta:
-        model = models.Article
-        exclude = ['uploaded_by', 'last_edited']
-        # widgets = { 'name':forms.TextInput(
-        #     attrs={
-        #         'class':"form-control",
-        #         'id':"articlename",
-        #         'placeholder':"Name of Paper"
-        #     })
-        # }
+
 class ProfileCompleteForm(forms.ModelForm):
     class Meta:
         model = models.Person
-        fields = ['user_type', 'academic_status', 'description']
+        fields = '__all__'
 
 class RegistrationForm(forms.ModelForm):
     full_name=forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Full Name'}))
@@ -39,6 +29,11 @@ class RegistrationForm(forms.ModelForm):
             raise forms.ValidationError(
                 "password and confirm_password does not match"
             )
+class ArticleForm(forms.ModelForm):
+    collaborators = forms.ModelMultipleChoiceField(queryset=models.Person.objects.all(),widget=forms.CheckboxSelectMultiple)
+    class Meta:
+        model = models.Article
+        fields = ['name', 'document', 'doc_type']
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Enter Id'}))

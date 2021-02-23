@@ -11,7 +11,7 @@ from django.urls import reverse
 
 class DashboardView(View):
     def get(self, request):
-        mform=forms.ArticleFileForm()
+        mform=forms.ArticleForm()
         articles = models.Article.objects.all()
         context = {
             'articles': articles,   #list of all articles
@@ -20,7 +20,7 @@ class DashboardView(View):
         return render(request, 'index.html', context)
 
     def post(self, request,*args, **kwargs):
-        f = forms.ArticleFileForm(request.POST, request.FILES)
+        f = forms.ArticleForm(request.POST, request.FILES)
         f.instance.uploaded_by=request.user.person
         if f.is_valid():
             f.save()
@@ -28,7 +28,7 @@ class DashboardView(View):
             print(f.errors)
         del(f)
         context = {
-            'form': forms.ArticleFileForm(),
+            'form': forms.ArticleForm(),
             'articles': models.Article.objects.all()
         } 
         return render(request, 'index.html', context)
@@ -111,11 +111,17 @@ def support(request):
 
 @login_required
 def articleView(request, id):
-
     article = models.Article.objects.get(id=id)
+    if request.method=='POST':
+        mform = forms.ArticleForm(request.POST, instance=article)
+        if mform.is_valid():
+            mform.save()
+    
     context = {
-        'article' : article
+        'article' : article,
+        'form' : forms.ArticleForm(instance=article)
     }
+    print(context)
     return render(request, 'article.html', context)
 
 @login_required
