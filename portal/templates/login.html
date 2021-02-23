@@ -1,0 +1,36 @@
+{%load static%}
+<html lang="en">
+<!-- login page -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <title>Login</title>
+  <link href="{%static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet" type="text/css">
+  <link href="{%static 'css/custom.css'%}" rel="stylesheet">
+</head>
+
+
+<body>
+  <!-- Login Content -->
+  <form method="POST">
+    <h1>Login</h1>
+    {{errmsg}}
+    {% csrf_token %}
+    <div class="form-group">
+      <label>Portal Id</label>
+      {{form.username}}
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      {{form.password}}
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  <h5>Don't have an account? <a href="{%url 'register'%}">Create here</a></h5>
+</body>
+
+</html>
+<!-- Login Content -->

@@ -63,31 +63,37 @@ class ProfileView(View):
 
 def logoutuser(request):
     logout(request)
-    return redirect('login')
+    return redirect(reverse('login'))
 
 
 def loginuser(request):
     if(request.method=='POST'):
-        username=request.POST.get('username')
-        password=request.POST.get('password')
-        print(username + password)
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            print('user found')
-            return redirect('/')
+        form = forms.LoginForm(request.POST)
+        if form.is_valid():
+            username  = form.cleaned_data.get("username")
+            password  = form.cleaned_data.get("password")
+            user = User.objects.get(username=username)
+            if user is not None:
+                if user.check_password(password):
+                    login(request, user)        
+                    print('user found')
+                    return redirect(reverse('index'))
+                return render(request, 'login.html', {'errmsg': "password incorrect", "form": form})
+            else:
+                print('not found')
+                return render(request, 'login.html', {'errmsg': "user not found", "form": form})
         else:
-            print('not found')
-            return render(request, 'login.html')
-    return render(request,'login.html')
+            print(form.errors)
+    return render(request,'login.html', {'form': forms.LoginForm()})
 
 
 def registeruser(request):
     if request.method=="POST":
         form = forms.RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
-            user = User.objects.get(username=request.POST.get('username'))
+            user=User(username=form.cleaned_data.get("username"))
+            user.set_password(form.cleaned_data.get("password"))
+            user.save()
             person = models.Person(full_name=request.POST.get('name'), user=user)
             person.save()
             print(person)

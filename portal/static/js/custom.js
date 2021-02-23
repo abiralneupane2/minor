@@ -1,19 +1,15 @@
 
-var burgerFlag = false;
-const burgerClick = () => {
-  burgerFlag ? $(".nav-links").css("opacity","0%"):$(".nav-links").css("opacity","100%");
-  burgerFlag=!burgerFlag;
-}
+// burger for navbar
+var burgerFlag = false; 
 
-$('.burger').click(burgerClick);
+$('.burger').click(function(){
+    burgerFlag ? $(".nav-links").css("opacity","0%"):$(".nav-links").css("opacity","100%");
+    burgerFlag=!burgerFlag;
+});
+//burger end
 
 
-
-$('#add').click(function () {
-  console.log("{{articles}}")
-
-})
-
+//function to favourite article
 $('button.favourite').click(function (event) {
   id = $(event.target).attr('value')
   favNum = $(event.target).parent().parent().find('span')
@@ -28,7 +24,7 @@ $('button.favourite').click(function (event) {
     success: function (res) {
       if (res.status == "created") {
         $(event.target).attr("class", "btn btn-primary");
-        favNum.text(favNum.text() + 1);
+        favNum.text(parseInt(favNum.text()) + 1);
       }
       else if (res.status == "deleted") {
 
@@ -39,6 +35,9 @@ $('button.favourite').click(function (event) {
     }
   });
 })
+
+
+//add comment button
 $('button.comment').click(function () {
   id = $(this).attr('value')
   comment = $(this).prev().val()
@@ -60,6 +59,7 @@ $('button.comment').click(function () {
   });
 })
 
+//span to delete comment
 $('span.cmnt-dlt').click(function (event) {
   id = $(this).attr('value')
   $.ajax({

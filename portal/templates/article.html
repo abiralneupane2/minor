@@ -5,34 +5,38 @@
 <!-- page for each article -->
 
 <div class="card">
-    <div class="card-header">
+    <div>
         {{article}}<br>
         {{article.uploaded_by}}-{{article.last_edited}}
-        <div id="favourite-container" style="float: right;">
 
-
+        <!--favourite button here -->
             <button
                 class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
                 value="{{article.id}}">Favourite</button>
 
 
-        </div>
     </div>
-    <div class="card-body">
+    <div>
         Preview:<br>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
         voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
         <br><br><button class="btn btn-primary" style="float: right;">Download</button>
     </div>
-    <div class="card-footer comment">
+
+    <!-- comment div -->
+    <div class="comment">
+        <!-- post comment div -->
         <div>
             <input type="text" placeholder="Comment" />
-            <button class="btn comment" value="{{article.id}}">Post</button>
+            <button class="comment" value="{{article.id}}">Post</button>
         </div>
+
+        <!-- comment list div -->
         <div>
             {% for comment in article.get_comments %}
             <div>
-            <br>
+
+            <!-- span to delete comment available if logged in by owner or commented by owner -->
             {%if comment.from_person == request.user.person or article.uploaded_by == request.user.person %}
             <span class="cmnt-dlt" value="{{comment.id}}">x</span>
             {%endif%}

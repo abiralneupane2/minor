@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
     path('', login_required(views.DashboardView.as_view()), name='index'),
+    path('login', views.loginuser, name='login'),
     path('logout', views.logoutuser, name='logout'),
     path('register', views.registeruser, name='register'),
     path('support', views.support, name='support'),
