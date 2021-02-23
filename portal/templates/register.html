@@ -2,19 +2,44 @@
 <!-- registration form -->
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Register</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href="{%static 'css/custom.css'%}">
+    <link href="{%static 'vendor/bootstrap/css/bootstrap.min.css'%}" rel="stylesheet" type="text/css">
 </head>
+
 <body>
+    <h1>Register</h1>
     <form method="POST">
         {% csrf_token %}
-        Name:<input name='name' type="text">
-        {{form.as_p }}
-        <input type="submit">
+        <div class="form-group">
+            <label>Full Name</label>
+            {{form.full_name }}
+        </div>
+        <div class="form-group">
+            <label>Username</label>
+            {{form.username}}
+        </div>
+        <div class="form-group">
+            <label>Email Id</label>
+            {{form.email}}
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            {{form.password}}
+        </div>
+        <div class="form-group">
+            <label>Confirm password</label>
+            {{form.confirm_password}}
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-outline-primary">
+        </div>
     </form>
 </body>
+
 </html>
