@@ -6,6 +6,7 @@ from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models, serializers
+from django.urls import reverse
 
 
 class DashboardView(View):
@@ -88,7 +89,20 @@ def loginuser(request):
 
 
 def registeruser(request):
-    return HttpResponse('<h1>register page</h1>')
+    if request.method=="POST":
+        form = forms.RegistrationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = User.objects.get(username=request.POST.get('username'))
+            person = models.Person(full_name=request.POST.get('name'), user=user)
+            person.save()
+            print(person)
+            login(request, user)
+            return redirect(reverse('index'))
+        else:
+            print(form.errors)
+
+    return render(request, 'register.html', {'form': forms.RegistrationForm()})
 
 
 def support(request):

@@ -1,5 +1,6 @@
 from django import forms
 from . import models
+from django.contrib.auth.models import User
 
 class ArticleFileForm(forms.ModelForm):
     class Meta:
@@ -12,8 +13,12 @@ class ArticleFileForm(forms.ModelForm):
                 'placeholder':"Name of Paper"
             })
         }
-    
-    # def clean_attachment(self):
-    #     if self.cleaned_data['document'].name.split('.')[1] is not "pdf":
-    #         raise forms.ValidationError('This file is not allowed.')
-    #     return self.cleaned_data['document']
+class ProfileCompleteForm(forms.ModelForm):
+    class Meta:
+        model = models.Person
+        fields = ['user_type', 'academic_status', 'description']
+
+class RegistrationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'password', 'email']

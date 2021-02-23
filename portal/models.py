@@ -8,13 +8,24 @@ from django.shortcuts import get_object_or_404
 
 class Person(models.Model):
     FACULTY=(
+        ('NS', 'Not Set'),
         ('BCT', 'Bachelor in Computer Engineering'),
         ('BCE', 'Bachelor in Civil Engineering')
     )
+    ACADEMIC_STATUS=(
+        (1, 'Not Set'),
+        (2, 'Studying'),
+        (3, 'Completed'),
+        (4, 'Teaching'),
+    )
     objects = models.Manager()
+    full_name = models.CharField(max_length=100)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     relationships = models.ManyToManyField('self', through='Relationship', symmetrical=False, related_name='related_to')
-    user_type = models.CharField(max_length=3, choices=FACULTY, default='BCT')
+    user_type = models.CharField(max_length=3, choices=FACULTY, default='NS')
+    academic_status = models.IntegerField(choices=ACADEMIC_STATUS, default=1)
+    description = models.TextField(max_length=500, null=True)
+
 
     def get_followers_number(self):
         return len(Relationship.objects.filter(to_person=self))
@@ -47,7 +58,7 @@ class Person(models.Model):
 
 
     def __str__(self):
-        return self.user.username
+        return self.full_name
 
 
 class Article(models.Model):
