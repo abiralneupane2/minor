@@ -3,7 +3,12 @@
 {%load tags%}
 {%block content%}
 
+<!-- Home page -->
+
 <h1>Dashboard</h1>
+
+
+<!-- Card for articles -->
 
 {% for article in articles %}
 <div class="card" style="margin: 10px;">
@@ -13,21 +18,21 @@
     <span>{{article.get_favouritee|length}}</span>
     <div id="favourite-container" style="float: right;">
 
-
+      <!-- favourite button -->
       <button
         class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
         value="{{article.id}}">Favourite</button>
-
-
     </div>
   </div>
+
+  <!-- card body -->
   <div class="card-body">
     Preview:<br>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
     voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
     <br><br><button class="btn btn-primary" style="float: right;">Download</button>
   </div>
-
+  <!--comment div-->
   <div class="card-footer comment">
     <div>
       <input type="text" placeholder="Comment" />
@@ -43,16 +48,17 @@
   </div>
 
 </div>
+<!-- card end -->
 {% endfor %}
 
-
+<!-- add new article floating button -->
 <button type="button" class="btn float" id="add" data-toggle="modal" data-target="#exampleModalScrollable"
   id="#modalScroll"><i class="fa fa-plus my-float"></i>
 </button>
 
 
 
-
+<!-- modal for add article form -->
 <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
   aria-labelledby="exampleModalScrollableTitle" style="display: none;" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -63,29 +69,26 @@
           <span aria-hidden="true">×</span>
         </button>
       </div>
-      <form method="POST">
+
+      <!-- form starts here -->
+      <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="modal-body">
-
           <div class="form-group">
-            <label for="articlename">Name</label>
+            <label>Name</label>
             {{form.name}}
           </div>
-
           <div class="form-group">
             <div class="custom-file">
               {{form.document}}
-              <!-- <label class="custom-file-label" for="customFile">Choose file</label> -->
             </div>
           </div>
           <div class="form-group">
             <label for="doc_type">Type</label>
             {{form.doc_type}}
           </div>
-
-
-
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary">Submit</button>
@@ -99,10 +102,7 @@
 
 
 
-</div>
 
-</div>
-</div>
 
 
 {%endblock%}

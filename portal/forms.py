@@ -6,13 +6,13 @@ class ArticleFileForm(forms.ModelForm):
     class Meta:
         model = models.Article
         exclude = ['uploaded_by', 'last_edited']
-        widgets = { 'name':forms.TextInput(
-            attrs={
-                'class':"form-control",
-                'id':"articlename",
-                'placeholder':"Name of Paper"
-            })
-        }
+        # widgets = { 'name':forms.TextInput(
+        #     attrs={
+        #         'class':"form-control",
+        #         'id':"articlename",
+        #         'placeholder':"Name of Paper"
+        #     })
+        # }
 class ProfileCompleteForm(forms.ModelForm):
     class Meta:
         model = models.Person
