@@ -52,50 +52,44 @@
 {% endfor %}
 
 <!-- add new article floating button -->
-<button type="button" class="btn float" id="add" data-toggle="modal" data-target="#exampleModalScrollable"
-  id="#modalScroll"><i class="fa fa-plus my-float"></i>
-</button>
+<button id="myBtn" class="float"><i class="fa fa-plus my-float"></i></button>
+
 
 
 
 <!-- modal for add article form -->
-<div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog"
-  aria-labelledby="exampleModalScrollableTitle" style="display: none;" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-scrollable" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalScrollableTitle">Add Article</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">×</span>
-        </button>
-      </div>
 
-      <!-- form starts here -->
-      <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Name</label>
-            {{form.name}}
-          </div>
-          <div class="form-group">
-            <div class="custom-file">
-              {{form.document}}
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="doc_type">Type</label>
-            {{form.doc_type}}
+
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <!-- form starts here -->
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+        <div class="form-group">
+          <label>Name</label>
+          {{form.name}}
+        </div>
+        <div class="form-group">
+          <div class="custom-file">
+            {{form.document}}
           </div>
         </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-outline-primary" data-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary">Submit</button>
+        <div class="form-group">
+          <label for="doc_type">Type</label>
+          {{form.doc_type}}
         </div>
-      </form>
-    </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
   </div>
+
+</div>
+
+</div>
+</div>
 </div>
 
 

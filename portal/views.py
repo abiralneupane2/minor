@@ -10,35 +10,27 @@ from django.urls import reverse
 
 
 class DashboardView(View):
-    
-
     def get(self, request):
-        print(request.user)
-        print(request.user.person)
         mform=forms.ArticleFileForm()
         articles = models.Article.objects.all()
         context = {
-            'articles': articles,
-            'form': mform,
-            
+            'articles': articles,   #list of all articles
+            'form': mform,  #form to add article  
         }
         return render(request, 'index.html', context)
 
-    def post(self, request, **kwargs):
+    def post(self, request,*args, **kwargs):
         f = forms.ArticleFileForm(request.POST, request.FILES)
         f.instance.uploaded_by=request.user.person
         if f.is_valid():
-            
             f.save()
         else:
             print(f.errors)
-        # article=models.Article(uploaded_by=request.user.person, name=articlename, document=document)
-        # do something with your data
         del(f)
         context = {
             'form': forms.ArticleFileForm(),
             'articles': models.Article.objects.all()
-        }  #  setrequest your context
+        } 
         return render(request, 'index.html', context)
 
 
