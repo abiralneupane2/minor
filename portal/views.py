@@ -13,6 +13,8 @@ class DashboardView(View):
     
 
     def get(self, request):
+        print(request.user)
+        print(request.user.person)
         mform=forms.ArticleFileForm()
         articles = models.Article.objects.all()
         context = {
