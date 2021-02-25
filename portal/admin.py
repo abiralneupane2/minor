@@ -6,5 +6,6 @@ admin.site.register(models.Article)
 admin.site.register(models.Relationship)
 admin.site.register(models.Favourite)
 admin.site.register(models.Comment)
+admin.site.register(models.Files)
 
 

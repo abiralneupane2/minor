@@ -12,23 +12,31 @@ from django.urls import reverse
 class DashboardView(View):
     def get(self, request):
         mform=forms.ArticleForm()
+        fform=forms.ArticleFileForm()
         articles = models.Article.objects.all()
         context = {
             'articles': articles,   #list of all articles
             'form': mform,  #form to add article  
+            'fform': fform,
         }
         return render(request, 'index.html', context)
 
     def post(self, request,*args, **kwargs):
-        f = forms.ArticleForm(request.POST, request.FILES)
+        f = forms.ArticleForm(request.POST)
+        a = forms.ArticleFileForm(request.POST, request.FILES)
         f.instance.uploaded_by=request.user.person
-        if f.is_valid():
+        if f.is_valid() and a.is_valid():
             f.save()
+            files = request.FILES.getlist('file')
+            for file in files:
+                models.Files(file=file, article=f.instance).save()
         else:
             print(f.errors)
+            print(a.errors)
         del(f)
         context = {
             'form': forms.ArticleForm(),
+            'fform': forms.ArticleFileForm(),
             'articles': models.Article.objects.all()
         } 
         return render(request, 'index.html', context)
@@ -114,12 +122,19 @@ def articleView(request, id):
     article = models.Article.objects.get(id=id)
     if request.method=='POST':
         mform = forms.ArticleForm(request.POST, instance=article)
-        if mform.is_valid():
+        fform = forms.ArticleFileForm(request.FILES)
+        if mform.is_valid() and fform.is_valid():
+            models.Files.objects.filter(article=article).delete()
             mform.save()
+            files = request.FILES.getlist('file')
+            for file in files:
+                models.Files(file=file, article=mform.instance).save()
+                
     
     context = {
         'article' : article,
-        'form' : forms.ArticleForm(instance=article)
+        'form' : forms.ArticleForm(instance=article),
+        'fform' : forms.ArticleFileForm(instance=models.Files.objects.filter(article=article).first())
     }
     print(context)
     return render(request, 'article.html', context)

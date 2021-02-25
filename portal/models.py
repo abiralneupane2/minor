@@ -70,7 +70,6 @@ class Article(models.Model):
     name = models.CharField(max_length=500)
     last_edited = models.DateField(auto_now= True)
     uploaded_by = models.ForeignKey(Person, on_delete=models.CASCADE,related_name="owner")
-    document = models.FileField(upload_to='files/', null=True)
     doc_type = models.IntegerField(choices=DOC_TYPE, default=1)
     collaborators = models.ManyToManyField(Person, related_name="collaborators")
     def get_favouritee(self):
@@ -115,3 +114,8 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment
+
+class Files(models.Model):
+    objects = models.Manager()
+    article = models.ForeignKey(Article, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='files/', null=True)

@@ -30,11 +30,19 @@ class RegistrationForm(forms.ModelForm):
                 "password and confirm_password does not match"
             )
 class ArticleForm(forms.ModelForm):
-    collaborators = forms.ModelMultipleChoiceField(queryset=models.Person.objects.all(),widget=forms.CheckboxSelectMultiple)
+    collaborators = forms.ModelMultipleChoiceField(queryset=models.Person.objects.all(),widget=forms.CheckboxSelectMultiple, required=False)
     class Meta:
         model = models.Article
-        fields = ['name', 'document', 'doc_type']
+        fields = ['name', 'doc_type']
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Enter Id'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder':'Password'}))
+
+class ArticleFileForm(forms.ModelForm):
+    class Meta:
+        model = models.Files
+        fields = ('file',)
+        widgets = {
+            'file': forms.ClearableFileInput(attrs={'multiple': True})
+        }
