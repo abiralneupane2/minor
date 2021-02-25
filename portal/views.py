@@ -45,8 +45,11 @@ class DashboardView(View):
 class ProfileView(View):
 
     def get(self, request, username='self'):
+        
         if username == 'self':
             user=request.user
+            userForm = forms.UserEditForm(instance=request.user)
+            personForm = forms.ProfileCompleteForm(instance=request.user.person)
 
         else:
             user=User.objects.get(username=username)
@@ -57,17 +60,19 @@ class ProfileView(View):
             'articles': articles,
             'followers': user.person.get_followers(),
             'following': user.person.get_following(),
-            'favourites': user.person.get_favourites()
+            'favourites': user.person.get_favourites(),
+            'form1': userForm,
+            'form2': personForm
         }
         return render(request, 'profile.html', context)
 
 
-    def post(self, request, **kwargs):
-        my_data = request.POST
-        print(my_data)
-        # do something with your data
-        context = {}  #  set your context
-        return render(request, 'profile.html', context)
+    def post(self, request, *args, **kwargs):
+        userForm = forms.UserEditForm(request.POST, instance=request.user)
+        personForm = forms.ProfileCompleteForm(request.POST, instance=request.user.person)
+        userForm.save()
+        personForm.save()
+        return redirect(reverse('profile'))
 
 def logoutuser(request):
     logout(request)
