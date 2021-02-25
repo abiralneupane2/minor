@@ -7,13 +7,11 @@
 <div class="card">
     <div>
         {{article}}<br>
-        {{article.uploaded_by}}-{{article.last_edited}}
+        <a href="{% url 'profileview' article.uploaded_by.user.username %}">{{article.uploaded_by}}</a>-{{article.last_edited}}
 
         <!--favourite button here -->
-        {%if user.is_authenticated %}<button
-                class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
-                value="{{article.id}}">Favourite</button>
-{%endif%}
+        {%if user.is_authenticated %}<input type="checkbox" class="favourite" value="{{article.id}}" {% if article|checkFavourite:request.user %}checked{%endif%}>{% endif %}
+
 
     </div>
     <div>

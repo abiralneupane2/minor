@@ -14,7 +14,7 @@
 <div class="card" style="margin: 10px;">
   <div>
     <a href="{% url 'article' article.id %}">{{article}}</a><br>
-    <a href="{% url 'profileview' article.uploaded_by.user.username %}"">{{article.uploaded_by}}</a>-{{article.last_edited}}<br>
+    <a href="{% url 'profileview' article.uploaded_by.user.username %}">{{article.uploaded_by}}</a>-{{article.last_edited}}<br>
     <span>{{article.get_favouritee|length}}</span>
       {%if user.is_authenticated %}<input type="checkbox" class="favourite" value="{{article.id}}" {% if article|checkFavourite:request.user %}checked{%endif%}>{% endif %}
   </div>
@@ -26,7 +26,10 @@
     Preview:<br>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
     voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
-    <br><br><button>Download</button>
+    <br><br>
+    {% for file in article.get_files.document %}
+      <button>Download</button>
+    {% endfor %}
   </div>
 
   <!--comment div-->
@@ -51,6 +54,7 @@
 {% endfor %}
 
 <!-- add new article floating button -->
+{%if user.is_authenticated %}
 <button id="myBtn" class="float"><i class="fa fa-plus my-float"></i></button>
 
 
@@ -88,7 +92,7 @@
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
-
+{%endif%}
 </div>
 
 

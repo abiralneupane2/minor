@@ -13,7 +13,7 @@ urlpatterns = [
     path('article/<int:id>', views.ArticleView.as_view(), name='article'),
     path('favourite', views.toggleFavourite, name='favourite'),
     path('comment', views.Comment.as_view(), name='comment'),
-    path('follow', views.follow, name='follow')
+    path('follow', views.follow, name='follow'),
 
 
 ]

@@ -85,6 +85,10 @@ class Article(models.Model):
         comments = Comment.objects.filter(to_article=self)
         return comments
 
+    def get_files(self):
+        files = Files.objects.filter(article=self)
+        return files
+
     def __str__(self):
         return self.name
 

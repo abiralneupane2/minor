@@ -15,7 +15,7 @@
   <div>
     <nav>
       <div class="mlogo">
-        <h4>{%if user.is_authenticated %}{{request.user}}{%else%}Guest{%endif%} </h4>
+        <h4>{%if user.is_authenticated %}{{request.user.person}}{%else%}Guest{%endif%} </h4>
       </div>
       <div class="burger">
         <div></div>
