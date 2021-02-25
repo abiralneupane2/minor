@@ -15,7 +15,7 @@
   <div>
     <nav>
       <div class="mlogo">
-        <h4>{{request.user}}</h4>
+        <h4>{%if user.is_authenticated %}{{request.user}}{%else%}Guest{%endif%} </h4>
       </div>
       <div class="burger">
         <div></div>
@@ -24,9 +24,13 @@
       </div>
       <ul class="nav-links">
         <li><a href="{% url 'index' %}">Home</a></li>
-        <li><a href="{% url 'profile' %}">Profile</a></li>
+        {%if user.is_authenticated %}<li><a href="{% url 'profileview' request.user.username %}">Profile</a></li>{%endif%}
         <li><a href="{% url 'support' %}">Support</a></li>
+        {%if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
+        {%else%}
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {%endif%}
       </ul>
     </nav>
   </div>
@@ -42,10 +46,11 @@
 
   <!--script-->
   <script>
-    var username = "{{request.user.username}}"
+    var username = "{{request.user.person.full_name}}"
     var profileurl = "{% url 'profile' %}"
     var favouriteurl = "{% url 'favourite' %}"
     var commenturl = "{% url 'comment' %}"
+    var followUrl = "{% url 'follow' %}"
   </script>
   <script src="{%static 'js/jquery.js'%}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

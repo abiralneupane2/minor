@@ -61,3 +61,4 @@ class ArticleFileForm(forms.ModelForm):
         widgets = {
             'file': forms.ClearableFileInput(attrs={'multiple': True})
         }
+

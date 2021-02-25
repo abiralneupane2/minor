@@ -10,10 +10,10 @@
         {{article.uploaded_by}}-{{article.last_edited}}
 
         <!--favourite button here -->
-            <button
+        {%if user.is_authenticated %}<button
                 class="favourite btn {% if article|checkFavourite:request.user %} btn-primary {%else%} btn-outline-primary {%endif%}"
                 value="{{article.id}}">Favourite</button>
-
+{%endif%}
 
     </div>
     <div>
@@ -23,7 +23,7 @@
         <br><br>
         <button class="btn btn-primary" style="float: right;">Download</button>
         {% if article.uploaded_by == request.user.person %}
-            <button class="btn btn-primary" style="float: right;">Delete</button>
+            <button id="delete" style="float: right;", value="{{article.id}}">Delete</button>
             <button class="btn btn-primary" id="myBtn" style="float: right;">Edit</button>
             <div id="myModal" class="modal">
                 <!-- Modal content -->
@@ -34,11 +34,11 @@
                     {% csrf_token %}
                       <div class="form-group">
                         <label>Name</label>
-                        {{form.name}}
+                        {{mform.name}}
                       </div>
                       <div class="form-group">
                         <label>Collaborators</label>
-                        {{form.collaborators}}
+                        {{mform.collaborators}}
                       </div>
                       <div class="form-group">
                         <div class="custom-file">
@@ -47,7 +47,7 @@
                       </div>
                       <div class="form-group">
                         <label for="doc_type">Type</label>
-                        {{form.doc_type}}
+                        {{mform.doc_type}}
                       </div>
                       <button type="submit" class="btn btn-primary">Submit</button>
                   </form>
@@ -60,11 +60,12 @@
     <!-- comment div -->
     <div class="comment">
         <!-- post comment div -->
+        {%if user.is_authenticated %}
         <div>
             <input type="text" placeholder="Comment" />
             <button class="comment" value="{{article.id}}">Post</button>
         </div>
-
+{%endif%}
         <!-- comment list div -->
         <div>
             {% for comment in article.get_comments %}

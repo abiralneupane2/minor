@@ -1,6 +1,6 @@
 {%extends 'nbase.html'%}
 {%load static%}
-
+{%load tags%}
 {%block content%}
 <!-- profile view -->
 
@@ -18,49 +18,55 @@
         {{following|length}} following {{followers|length}} followers {{articles|length}} articles
       </div>
       <div>
-        <button class="edit-profile" id="myBtn">Edit Profile</button>
-        <div id="myModal" class="modal">
+        {% if user.is_authenticated %}
+          {% if request.user.person == person %}
+          <button class="edit-profile" id="myBtn">Edit Profile</button>
+          <div id="myModal" class="modal">
 
-          <!-- Modal content -->
-          <div class="modal-content">
-            <span class="close">&times;</span>
-            <!-- form starts here -->
-            <div>
-            <form method="POST">
-              {% csrf_token %}
-                <div class="form-group">
-                  <label>Name</label>
-                  {{form2.full_name}}
-                </div>
-                <div class="form-group">
-                  <label>Username</label>
-                  {{form1.username}}
-                </div>
-                <div class="form-group">
-                  <label>User type</label>
-                  {{form2.user_type}}
-                </div>
-                <div class="form-group">
-                  <label>Academic Status</label>
-                  {{form2.academic_status}}
-                </div>
-                <div class="form-group">
-                  <label>Description</label>
-                  {{form2.description}}
-                </div>
-                <div class="form-group">
-                  <label>Email</label>
-                  {{form1.email}}
-                </div>
-                
-                
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
-          </div>
+            <!-- Modal content -->
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <!-- form starts here -->
+              <div>
+              <form method="POST">
+                {% csrf_token %}
+                  <div class="form-group">
+                    <label>Name</label>
+                    {{form2.full_name}}
+                  </div>
+                  <div class="form-group">
+                    <label>Username</label>
+                    {{form1.username}}
+                  </div>
+                  <div class="form-group">
+                    <label>User type</label>
+                    {{form2.user_type}}
+                  </div>
+                  <div class="form-group">
+                    <label>Academic Status</label>
+                    {{form2.academic_status}}
+                  </div>
+                  <div class="form-group">
+                    <label>Description</label>
+                    {{form2.description}}
+                  </div>
+                  <div class="form-group">
+                    <label>Email</label>
+                    {{form1.email}}
+                  </div>
+                  
+                  
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            
+            </div>
           
           </div>
-        
-        </div>
+          {%else%}
+          <button class="follow-person" value="{{person.id}}">{% if request.user|checkFollows:person %}Unfollow{%else%}Follow{%endif%}</button>
+          {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
@@ -104,7 +110,9 @@
       <div class="row">
         <a href="{% url 'profileview' follower %}">
           {{follower}}
+          {% if request.user.person == person %}<button class="follow-person" value="{{following.id}}">{% if request.user|checkFollows:following %}Unfollow{%else%}Follow{%endif%}</button>{%endif%}
         </a>
+        
       </div>
       {% endfor %}
     </div>
@@ -113,6 +121,25 @@
 {% endif %}
 <!-- list end -->
 
+{% if followings|length > 0%}
+<div class="card">
+  <div class="card-header">
+    Following
+  </div>
+  <div class="card-body">
+    <div class="col">
+      {% for following in followings %}
+      <div class="row">
+        <a href="{% url 'profileview' following %}">
+          {{following.to_person}}
+        </a>
+        {% if request.user.person == person %}<button class="follow-person" value="{{following.to_person.id}}">{% if request.user|checkFollows:following.to_person %}Unfollow{%else%}Follow{%endif%}</button>{%endif%}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endif %}
 
 <!-- list of favourited articles doesnot appear if no article -->
 {% if favourites|length > 0%}

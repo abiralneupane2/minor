@@ -79,6 +79,39 @@ $('span.cmnt-dlt').click(function (event) {
   })
 })
 
+$('button#delete').click(function(){
+  let id = $(this).attr('value')
+  console.log("delete pressecd");
+  let check = prompt("Do you want to delete this?")
+  if (check){
+    $.ajax({
+      url : articleUrl,
+      method : 'delete',
+      beforeSend: function (xhr) {
+        xhr.setRequestHeader("X-CSRFToken", window.CSRF_TOKEN);
+      },
+      data : {
+         id :id
+      }
+ })
+  }
+})
+$('button.follow-person').click(function(event){
+  var personId = $(event.target).attr('value')
+  $.ajax({
+    url : followUrl,
+    method : 'post',
+    data: {
+      csrfmiddlewaretoken: window.CSRF_TOKEN,
+      personId : personId,
+    },
+    success: function(res){
+      console.log(res);
+      $(event.target).html(res==201?"Unfollow":"Follow")
+    }
+  })
+})
+
 
 //Javascript for modal 
 var modal = document.getElementById("myModal");

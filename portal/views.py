@@ -33,37 +33,32 @@ class DashboardView(View):
         else:
             print(f.errors)
             print(a.errors)
-        del(f)
-        context = {
-            'form': forms.ArticleForm(),
-            'fform': forms.ArticleFileForm(),
-            'articles': models.Article.objects.all()
-        } 
-        return render(request, 'index.html', context)
+        return redirect(reverse('index'))
 
 
 class ProfileView(View):
 
-    def get(self, request, username='self'):
-        
-        if username == 'self':
-            user=request.user
-            userForm = forms.UserEditForm(instance=request.user)
-            personForm = forms.ProfileCompleteForm(instance=request.user.person)
-
-        else:
+    def get(self, request, username=''):
+        try:
             user=User.objects.get(username=username)
-        articles=models.Article.objects.filter(uploaded_by=user.person)
-
+        except:
+            user=request.user
+        print(user)
+        articles=models.Article.objects.filter(uploaded_by=user.person) 
         context={
-            'person' : models.Person.objects.get(user=user),
+            'person' : user.person,
             'articles': articles,
             'followers': user.person.get_followers(),
-            'following': user.person.get_following(),
-            'favourites': user.person.get_favourites(),
-            'form1': userForm,
-            'form2': personForm
+            'followings': user.person.get_following(),
+            'favourites': user.person.get_favourites()
         }
+        
+        
+        if not user.is_anonymous:
+            print(request.user)
+            context['form1']=forms.UserEditForm(instance=user)
+            context['form2']=forms.ProfileCompleteForm(instance=user.person)
+               
         return render(request, 'profile.html', context)
 
 
@@ -122,27 +117,43 @@ def registeruser(request):
 def support(request):
     return render(request, 'support.html')
 
-@login_required
-def articleView(request, id):
-    article = models.Article.objects.get(id=id)
-    if request.method=='POST':
-        mform = forms.ArticleForm(request.POST, instance=article)
-        fform = forms.ArticleFileForm(request.FILES)
-        if mform.is_valid() and fform.is_valid():
-            models.Files.objects.filter(article=article).delete()
-            mform.save()
-            files = request.FILES.getlist('file')
-            for file in files:
-                models.Files(file=file, article=mform.instance).save()
-                
+
+class ArticleView(View):
     
-    context = {
-        'article' : article,
-        'form' : forms.ArticleForm(instance=article),
-        'fform' : forms.ArticleFileForm(instance=models.Files.objects.filter(article=article).first())
-    }
-    print(context)
-    return render(request, 'article.html', context)
+    def post(self, request, *args, **kwargs):
+        id = self.kwargs['id']
+        article = models.Article.objects.get(id=id)
+        mform = forms.ArticleForm(request.POST,  instance=article)
+        fform = forms.ArticleFileForm(request.POST, request.FILES)
+        print(fform)
+        if mform.is_valid():
+            print("valid")
+            mform.save()
+            if fform.is_valid():
+                models.Files.objects.filter(article=article).delete()
+                files = request.FILES.getlist('file')
+                for file in files:
+                    models.Files(file=file, article=mform.instance).save()
+        else:
+            print(fform.errors + mform.errors)
+        return redirect(reverse('article', kwargs={'id':id}))
+                
+    def get(self, request, *args, **kwargs):
+        print("get")
+        id = self.kwargs['id']
+        article = models.Article.objects.get(id=id)
+        context = {
+            'article' : article,
+            'mform' : forms.ArticleForm(instance=article),
+            'fform' : forms.ArticleFileForm(instance=models.Files.objects.filter(article=article).first())
+        }
+        return render(request, 'article.html', context)
+    
+    def delete(self, request):
+        body_unicode = request.body.decode('utf-8')
+        id = body_unicode.split('=')[1]
+        models.Article.objects.get(id=id).delete()
+        return redirect(reverse('index'))
 
 @login_required
 def toggleFavourite(request):
@@ -171,9 +182,18 @@ class Comment(View):
         return HttpResponse(200)
 
     def delete(self, request):	
-        print(request.body)
         body_unicode = request.body.decode('utf-8')
-        print(body_unicode)
         id = body_unicode.split('=')[1]
         models.Comment.objects.get(id=id).delete()
         return HttpResponse(200)
+
+def follow(request):
+    to_person = models.Person.objects.get(id=request.POST.get('personId'))
+    from_person = request.user.person
+    try:
+        relationship = models.Relationship.objects.get(from_person=from_person, to_person=to_person)
+        relationship.delete()
+        return HttpResponse(200)
+    except:
+        models.Relationship(from_person=from_person, to_person=to_person).save()
+        return HttpResponse(201)

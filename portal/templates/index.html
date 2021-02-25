@@ -14,9 +14,9 @@
 <div class="card" style="margin: 10px;">
   <div>
     <a href="{% url 'article' article.id %}">{{article}}</a><br>
-    {{article.uploaded_by}}-{{article.last_edited}}<br>
+    <a href="{% url 'profileview' article.uploaded_by.user.username %}"">{{article.uploaded_by}}</a>-{{article.last_edited}}<br>
     <span>{{article.get_favouritee|length}}</span>
-      <input type="checkbox" class="favourite" value="{{article.id}}" {% if article|checkFavourite:request.user %}checked{%endif%}>
+      {%if user.is_authenticated %}<input type="checkbox" class="favourite" value="{{article.id}}" {% if article|checkFavourite:request.user %}checked{%endif%}>{% endif %}
   </div>
 {% for collaborator in article.collaborators.all %}
   <li>{{collaborator}}</li>
@@ -31,10 +31,12 @@
 
   <!--comment div-->
   <div class="comment">
+    {%if user.is_authenticated %}
     <div>
       <input type="text" placeholder="Comment" />
       <button class="comment" value="{{article.id}}">Post</button>
     </div>
+    {% endif %}
     <!--comments list -->
     <div>
       {% for comment in article.get_comments %}
