@@ -9,7 +9,7 @@
 
 
 <!-- Card for articles -->
-
+{% if articles %}
 {% for article in articles %}
 <div class="card" style="margin: 10px;">
   <div>
@@ -52,7 +52,9 @@
 </div>
 <!-- card end -->
 {% endfor %}
-
+{% else %}
+No results found.
+{% endif %}
 <!-- add new article floating button -->
 {%if user.is_authenticated %}
 <button id="myBtn" class="float"><i class="fa fa-plus my-float"></i></button>

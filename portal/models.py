@@ -123,3 +123,5 @@ class Files(models.Model):
     objects = models.Manager()
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
     file = models.FileField(upload_to='files/', null=True)
+    class Meta:
+      verbose_name_plural = "files"

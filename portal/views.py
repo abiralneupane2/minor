@@ -3,17 +3,23 @@ from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.models import User
 import json
 from django.views import View
+from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from . import forms, models, serializers
 from django.urls import reverse
+from django.db.models import Q
 
 
 class DashboardView(View):
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         mform=forms.ArticleForm()
         fform=forms.ArticleFileForm()
-        articles = models.Article.objects.all()
+        q = request.GET.get('q')
+        if q:
+            articles = models.Article.objects.filter(Q(name__icontains=q) | Q(uploaded_by__full_name__icontains=q)).distinct()
+        else:
+            articles = models.Article.objects.all()
         context = {
             'articles': articles,   #list of all articles
             'form': mform,  #form to add article  
@@ -197,3 +203,7 @@ def follow(request):
     except:
         models.Relationship(from_person=from_person, to_person=to_person).save()
         return HttpResponse(201)
+
+def search(request):
+    context={}
+    return render(request, 'search.html', context)

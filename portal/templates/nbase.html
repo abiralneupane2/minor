@@ -23,14 +23,17 @@
         <div></div>
       </div>
       <ul class="nav-links">
+        <li><form action="{% url 'index' %}"><input type="text" name="q" placeholder="Search.."></form></li>
         <li><a href="{% url 'index' %}">Home</a></li>
         {%if user.is_authenticated %}<li><a href="{% url 'profileview' request.user.username %}">Profile</a></li>{%endif%}
         <li><a href="{% url 'support' %}">Support</a></li>
+        <li><a href="{% url 'search' %}">Search</a></li>
         {%if user.is_authenticated %}
         <li><a href="{% url 'logout' %}">Logout</a></li>
         {%else%}
         <li><a href="{% url 'login' %}">Login</a></li>
         {%endif%}
+        
       </ul>
     </nav>
   </div>

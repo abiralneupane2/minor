@@ -39,6 +39,7 @@ $('input.favourite').click(function (event) {
 $('button.comment').click(function () {
   id = $(this).attr('value')
   comment = $(this).prev().val()
+  $(this).prev().val('')
   $.ajax({
     url: commenturl,
     cache: false,

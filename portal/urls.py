@@ -14,6 +14,7 @@ urlpatterns = [
     path('favourite', views.toggleFavourite, name='favourite'),
     path('comment', views.Comment.as_view(), name='comment'),
     path('follow', views.follow, name='follow'),
+    path('search', views.search, name='search')
 
 
 ]
