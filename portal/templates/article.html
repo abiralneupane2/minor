@@ -3,7 +3,7 @@
 {%load tags%}
 
 <!-- page for each article -->
-
+{% if article %}
 <div class="card">
     <div>
         {{article}}<br>
@@ -83,4 +83,7 @@
     </div>
 
 </div>
+{% else %}
+Not found or deleted
+{% endif %}
 {%endblock%}

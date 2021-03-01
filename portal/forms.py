@@ -48,7 +48,7 @@ class ArticleForm(forms.ModelForm):
     collaborators = forms.ModelMultipleChoiceField(queryset=models.Person.objects.all(),widget=forms.CheckboxSelectMultiple, required=False)
     class Meta:
         model = models.Article
-        fields = ['name', 'doc_type']
+        fields = ['name', 'doc_type', 'description']
 
 class LoginForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder':'Enter Id'}))

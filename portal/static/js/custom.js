@@ -83,11 +83,10 @@ $('span.cmnt-dlt').click(function (event) {
 $('button#delete').click(function(){
   let id = $(this).attr('value')
   console.log("delete pressecd");
-  let check = prompt("Do you want to delete this?")
-  if (check){
+  if (confirm("Are you sure?")) {
     $.ajax({
-      url : articleUrl,
-      method : 'delete',
+      url : deleteUrl,
+      method : 'post',
       beforeSend: function (xhr) {
         xhr.setRequestHeader("X-CSRFToken", window.CSRF_TOKEN);
       },
@@ -95,6 +94,8 @@ $('button#delete').click(function(){
          id :id
       }
  })
+  } else {
+    console.log("cancelled");
   }
 })
 $('button.follow-person').click(function(event){
@@ -114,7 +115,6 @@ $('button.follow-person').click(function(event){
 })
 
 
-//Javascript for modal 
 var modal = document.getElementById("myModal");
 
 // Get the button that opens the modal

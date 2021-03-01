@@ -13,6 +13,7 @@ from django.db.models import Q
 
 class DashboardView(View):
     def get(self, request, *args, **kwargs):
+        articles = models.Article.objects.none()
         mform=forms.ArticleForm()
         fform=forms.ArticleFileForm()
         q = request.GET.get('q')
@@ -64,6 +65,7 @@ class ProfileView(View):
             print(request.user)
             context['form1']=forms.UserEditForm(instance=user)
             context['form2']=forms.ProfileCompleteForm(instance=user.person)
+            context['form3']=forms.PasswordChangeForm()
                
         return render(request, 'profile.html', context)
 
@@ -71,8 +73,10 @@ class ProfileView(View):
     def post(self, request, *args, **kwargs):
         userForm = forms.UserEditForm(request.POST, instance=request.user)
         personForm = forms.ProfileCompleteForm(request.POST, instance=request.user.person)
+        passwordChangeForm = forms.PasswordChangeForm(request.POST,instance=request.user)
         userForm.save()
         personForm.save()
+        passwordChangeForm.save()
         return redirect(reverse('profile'))
 
 def logoutuser(request):
@@ -147,19 +151,22 @@ class ArticleView(View):
     def get(self, request, *args, **kwargs):
         print("get")
         id = self.kwargs['id']
-        article = models.Article.objects.get(id=id)
-        context = {
-            'article' : article,
-            'mform' : forms.ArticleForm(instance=article),
-            'fform' : forms.ArticleFileForm(instance=models.Files.objects.filter(article=article).first())
-        }
+        try:
+            article = models.Article.objects.get(id=id)
+            mform = forms.ArticleForm(instance=article)
+            fform = forms.ArticleFileForm(instance=models.Files.objects.filter(article=article).first())
+            context = {
+                'article' : article,
+                'mform' : mform,
+                'fform' : fform
+            }
+        except:
+            context={
+            }
+        
         return render(request, 'article.html', context)
     
-    def delete(self, request):
-        body_unicode = request.body.decode('utf-8')
-        id = body_unicode.split('=')[1]
-        models.Article.objects.get(id=id).delete()
-        return redirect(reverse('index'))
+   
 
 @login_required
 def toggleFavourite(request):
@@ -207,3 +214,10 @@ def follow(request):
 def search(request):
     context={}
     return render(request, 'search.html', context)
+
+@login_required
+def deleteArticle(request):
+    body_unicode = request.body.decode('utf-8')
+    id = body_unicode.split('=')[1]
+    models.Article.objects.get(id=id).delete()
+    return redirect(reverse('index'))

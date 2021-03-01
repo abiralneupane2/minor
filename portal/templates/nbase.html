@@ -3,8 +3,10 @@
 <html lang="en" dir="ltr">
 
 <head>
+  
   <link rel="stylesheet" href="{%static 'css/custom.css'%}">
   <meta charset="utf-8">
+  <link href="{% static 'img/logo/Tribhuvan_University_Logo.png'%}" rel="icon">
   <title>Research Portal</title>
 </head>
 
@@ -54,6 +56,7 @@
     var favouriteurl = "{% url 'favourite' %}"
     var commenturl = "{% url 'comment' %}"
     var followUrl = "{% url 'follow' %}"
+    var deleteUrl = "{% url 'delete' %}"
   </script>
   <script src="{%static 'js/jquery.js'%}"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"

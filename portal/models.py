@@ -71,7 +71,8 @@ class Article(models.Model):
     last_edited = models.DateField(auto_now= True)
     uploaded_by = models.ForeignKey(Person, on_delete=models.CASCADE,related_name="owner")
     doc_type = models.IntegerField(choices=DOC_TYPE, default=1)
-    collaborators = models.ManyToManyField(Person, related_name="collaborators")
+    collaborators = models.ManyToManyField(Person, related_name="collaborator")
+    description = models.TextField(max_length=1000, null=True)
     def get_favouritee(self):
         favourites = Favourite.objects.filter(to_article=self)
         return favourites

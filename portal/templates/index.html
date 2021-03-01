@@ -18,15 +18,18 @@
     <span>{{article.get_favouritee|length}}</span>
       {%if user.is_authenticated %}<input type="checkbox" class="favourite" value="{{article.id}}" {% if article|checkFavourite:request.user %}checked{%endif%}>{% endif %}
   </div>
-{% for collaborator in article.collaborators.all %}
-  <li>{{collaborator}}</li>
+{% for collaborator in article.collaborators_set.all %}
+  <li>check</li>
 {% endfor %}
   <!-- card body -->
   <div>
+    {% if article.description %}
+    <div>
     Preview:<br>
-    Lorem ipsum dolor sit amet consectetur adipisicing elit. Cupiditate magnam nam voluptates error sunt, rem eaque
-    voluptatem impedit aperiam, quasi qui autem culpa hic temporibus nisi repellendus fugiat sequi laboriosam.
+    {{article.description}}
     <br><br>
+    </div>
+    {%endif%}
     {% for file in article.get_files.document %}
       <button>Download</button>
     {% endfor %}
@@ -57,7 +60,7 @@ No results found.
 {% endif %}
 <!-- add new article floating button -->
 {%if user.is_authenticated %}
-<button id="myBtn" class="float"><i class="fa fa-plus my-float"></i></button>
+<button id="myBtn" class="float"><strong>+</strong></button>
 
 
 
@@ -90,6 +93,10 @@ No results found.
         <div class="form-group">
           <label for="doc_type">Type</label>
           {{form.doc_type}}
+        </div>
+        <div class="form-group">
+          <label for="doc_type">Short description</label>
+          {{form.description}}
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
